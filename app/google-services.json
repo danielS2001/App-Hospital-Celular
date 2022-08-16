@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "661632040782",
+    "project_id": "app-hospital-celular",
+    "storage_bucket": "app-hospital-celular.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:661632040782:android:967bba766653d0fbb8681f",
+        "android_client_info": {
+          "package_name": "com.example.hospitaldelcelular"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "661632040782-9bu1nr9ikbsp0rql12cdnklcf5hljvck.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.hospitaldelcelular",
+            "certificate_hash": "1a5f3e19d4b4d789b8c3ea45268075a9167d65ba"
+          }
+        },
+        {
+          "client_id": "661632040782-ti3br0dd2on0a1o7h91q9cscr1tkcol5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcPR5VnQbhcWsRalEgh_Ma3uqPWb-l93Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "661632040782-ti3br0dd2on0a1o7h91q9cscr1tkcol5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
