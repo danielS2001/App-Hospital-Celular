@@ -4,14 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity"
-    android:background="@color/teal_200">
+    android:background="#FFFFFF"
+    tools:context=".LoginActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:background="#FFFFFF"
+        android:foregroundTint="#FFFFFF"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -28,53 +30,54 @@
             app:titleTextColor="@android:color/background_light" />
 
         <TextView
+            android:id="@+id/lblTitulo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="26dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
             android:text="Login"
             android:textColor="@color/black"
-            android:gravity="center"
-            android:layout_marginTop="20dp"
-            android:id="@+id/lblTitulo"></TextView>
+            android:textSize="26dp"></TextView>
 
         <ImageView
             android:layout_width="123dp"
             android:layout_height="119dp"
-            android:src="@mipmap/user"
-            android:layout_marginTop="25dp">
-        </ImageView>
+            android:layout_marginTop="25dp"
+            android:src="@mipmap/user"></ImageView>
 
         <EditText
-            android:layout_marginTop="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:id="@+id/txtUsuario"
-            android:hint="Usuario">
-        </EditText>
-
-        <EditText
-            android:layout_marginTop="15dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="15dp"
+            android:backgroundTint="@color/black"
+            android:textColor="@color/black"
+            android:hint="Usuario"></EditText>
+
+        <EditText
             android:id="@+id/txtContra"
-            android:hint="Contraseña">
-        </EditText>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="15dp"
+            android:backgroundTint="@color/black"
+            android:textColor="@color/black"
+            android:hint="Contraseña"></EditText>
 
         <Button
+            android:id="@+id/btnIniciar"
             android:layout_width="162dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            android:id="@+id/btnIniciar"
             android:text="Iniciar sesión"></Button>
 
         <Button
             android:id="@+id/btnSalir"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="200dp"
             android:layout_marginLeft="150dp"
-            android:textSize="12dp"
-            android:text="Salir"></Button>
+            android:layout_marginTop="200dp"
+            android:text="Salir"
+            android:textSize="12dp"></Button>
 
     </LinearLayout>
 </ScrollView>

@@ -1,14 +1,14 @@
 package com.example.hospitaldelcelular;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,34 +16,41 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 
 import com.example.hospitaldelcelular.Objetos.Citas;
-import com.example.hospitaldelcelular.Objetos.ReferenciasFirebase;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.example.hospitaldelcelular.Objetos.Device;
+import com.example.hospitaldelcelular.Objetos.ProcesosPHP;
 
-import org.w3c.dom.Text;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class CitasActivity extends ListActivity {
-    private FirebaseDatabase basedatabase;
-    private DatabaseReference referencia;
-    //private Button btnNuevo;
+public class CitasActivity extends ListActivity implements Response.Listener<JSONObject>,Response.ErrorListener{
+
+    private final Context context = this;
+    private ProcesosPHP php = new ProcesosPHP();;
+    private RequestQueue request;
+    private JsonObjectRequest jsonObjectRequest;
+    private ArrayList<Citas> listaCitas;
+    private String serverip ="https://celularhospital.000webhostapp.com/WebService/";
     private Button btnSalir;
-    final Context context = this;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_citas);
-        basedatabase = FirebaseDatabase.getInstance();
-        referencia = basedatabase.getReferenceFromUrl(ReferenciasFirebase.URL_DATABASE
-                + ReferenciasFirebase.DATABASE_NAME + "/" +ReferenciasFirebase.TABLE_NAME);
+        listaCitas = new ArrayList<Citas>();
+        request = Volley.newRequestQueue(context);
+        consultarTodosWebService();
         btnSalir = (Button) findViewById(R.id.btnRegresar);
-        obtenerCitas();
         //btnNuevo.setOnClickListener(new View.OnClickListener() {
         //    @Override
         //    public void onClick(View view) {
@@ -73,34 +80,44 @@ public class CitasActivity extends ListActivity {
             }
         });
     }
-    public void obtenerCitas(){
-        final ArrayList<Citas> citas = new ArrayList<Citas>();
-        ChildEventListener listener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Citas cita = dataSnapshot.getValue(Citas.class);
-                citas.add(cita);
-                final MyArrayAdapter adapter = new MyArrayAdapter(context,R.layout.layout_appointment,citas);
-                setListAdapter(adapter);
-            }
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            }
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-            }
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        };
-        referencia.addChildEventListener(listener);
+    public void consultarTodosWebService(){
+        String url = serverip +"wsConsultarTodos.php?idMovil="+ Device.getSecureId(this);
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,url,null,this,this);
+        request.add(jsonObjectRequest);
+    }
+    @Override
+    public void onErrorResponse(VolleyError error) {
     }
 
-    class MyArrayAdapter extends ArrayAdapter<Citas>
-    { Context context; int textViewRecursoId;
+    @Override
+    public void onResponse(JSONObject response) {
+        Citas cita = null;
+        JSONArray json = response.optJSONArray("celular");
+        try {
+            for(int i=0;i<json.length();i++){
+                cita = new Citas();
+                JSONObject jsonObject = null;
+                jsonObject = json.getJSONObject(i);
+                cita.set_ID(jsonObject.optInt("_ID"));
+                cita.setNombre(jsonObject.optString("nombre"));
+                cita.setTelefono(jsonObject.optString("telefono"));
+                cita.setCorreo(jsonObject.optString("correo"));
+                cita.setDispositivo(jsonObject.optString("dispositivo"));
+                cita.setFalla(jsonObject.optString("falla"));
+                cita.setFecha(jsonObject.optString("fecha"));
+                cita.setHora(jsonObject.optString("hora"));
+                cita.setIdMovil(jsonObject.optString("idMovil"));
+                listaCitas.add(cita);
+            }
+            MyArrayAdapter adapter = new MyArrayAdapter(context,R.layout.layout_appointment,listaCitas);
+            setListAdapter(adapter);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    class MyArrayAdapter extends ArrayAdapter<Citas> { Context context;
+        int textViewRecursoId;
         ArrayList<Citas> objects;
         public MyArrayAdapter(Context context, int textViewResourceId,ArrayList<Citas>
                 objects){
@@ -130,10 +147,12 @@ public class CitasActivity extends ListActivity {
                     confirmar.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            borrarCita(objects.get(position).get_ID());
+                            php.setContext(context);
+                            Log.i("id", String.valueOf(objects.get(position).get_ID()));
+                            php.borrarCitaWebService(objects.get(position).get_ID());
                             objects.remove(position);
                             notifyDataSetChanged();
-                            Toast.makeText(getApplicationContext(), "Cita eliminada con exito",
+                            Toast.makeText(getApplicationContext(),"Cita eliminado con exito",
                                     Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -148,9 +167,6 @@ public class CitasActivity extends ListActivity {
             });
             return view;
         }
-    }
-    public void borrarCita(String childIndex){
-        referencia.child(String.valueOf(childIndex)).removeValue();
     }
 
 

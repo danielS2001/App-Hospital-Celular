@@ -1,8 +1,6 @@
 package com.example.hospitaldelcelular;
 
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -11,16 +9,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.Settings;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.hospitaldelcelular.Objetos.Citas;
-import com.example.hospitaldelcelular.Objetos.ReferenciasFirebase;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.example.hospitaldelcelular.Objetos.Device;
+import com.example.hospitaldelcelular.Objetos.ProcesosPHP;
 
 public class AgendarActivity extends AppCompatActivity implements View.OnClickListener{
     private Button btnAgendar;
@@ -33,10 +35,9 @@ public class AgendarActivity extends AppCompatActivity implements View.OnClickLi
     private TextView txtFalla;
     private TextView txtFecha;
     private TextView txtHora;
-    private FirebaseDatabase basedatabase;
-    private DatabaseReference referencia;
     private Citas savedCita;
-    private String id;
+    ProcesosPHP php;
+    private int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +47,8 @@ public class AgendarActivity extends AppCompatActivity implements View.OnClickLi
         setEvents();
     }
     public void initComponents() {
-//se obtiene una instancia de la base de datos y se obtiene la referencia que apunta a la tabla citas
-        this.basedatabase = FirebaseDatabase.getInstance();
-        this.referencia = this.basedatabase.getReferenceFromUrl(ReferenciasFirebase.URL_DATABASE
-                + ReferenciasFirebase.DATABASE_NAME + "/" +ReferenciasFirebase.TABLE_NAME);
-
+        this.php = new ProcesosPHP();
+        php.setContext(this);
         this.txtNombre = findViewById(R.id.txtNombre);
         this.txtTelefono = findViewById(R.id.txtCelular);
         this.txtCorreo = findViewById(R.id.txtEmail);
@@ -113,14 +111,17 @@ public class AgendarActivity extends AppCompatActivity implements View.OnClickLi
                         nCita.setFalla(txtFalla.getText().toString());
                         nCita.setFecha(txtFecha.getText().toString());
                         nCita.setHora(txtHora.getText().toString());
+                        nCita.setIdMovil(Device.getSecureId(this));
                         if(savedCita == null){
-                            agregarCita(nCita);
-                            Toast.makeText(getApplicationContext(),"Cita guardada con exito",
-                                    Toast.LENGTH_SHORT).show(); limpiar();
+                            php.insertarCitaWebService(nCita);
+                            Toast.makeText(getApplicationContext(),"Cita creada con éxito",
+                                    Toast.LENGTH_SHORT).show();
+                            limpiar();
                         }else{
-                            actualizarCita(id, nCita);
-                            Toast.makeText(getApplicationContext(),"Cita actualizada con exito",
-                                    Toast.LENGTH_SHORT).show(); limpiar();
+                            php.actualizarCitaWebService(nCita,id);
+                            Toast.makeText(getApplicationContext(),"Cita actualizada éxitosamente",
+                                    Toast.LENGTH_SHORT).show();
+                            limpiar();
                         }
                     } break;
                 case R.id.btnLimpiar:
@@ -150,18 +151,7 @@ public class AgendarActivity extends AppCompatActivity implements View.OnClickLi
                     Toast.LENGTH_SHORT).show();
         }
     }
-    public void agregarCita(Citas c) {
-        DatabaseReference newCitaReference = referencia.push();
-        //obtener el id del registro y setearlo
-        String id = newCitaReference.getKey();
-        c.set_ID(id);
-        newCitaReference.setValue(c);
-    }
-    public void actualizarCita(String id, Citas p) {
-        //actualizar un objeto al nodo referencia
-        p.set_ID(id);
-        referencia.child(String.valueOf(id)).setValue(p);
-    }
+
     public boolean isNetworkAvailable() {
         ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         @SuppressLint("MissingPermission") NetworkInfo ni = cm.getActiveNetworkInfo();
@@ -176,7 +166,6 @@ public class AgendarActivity extends AppCompatActivity implements View.OnClickLi
         txtFalla.setText("");
         txtFecha.setText("");
         txtHora.setText("");
-        id="";
     }
     protected void onActivityResult(int requestCode, int resultCode, Intent intent){
         super.onActivityResult(requestCode,resultCode,intent);

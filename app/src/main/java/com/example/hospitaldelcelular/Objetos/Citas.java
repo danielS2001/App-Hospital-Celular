@@ -3,7 +3,7 @@ package com.example.hospitaldelcelular.Objetos;
 import java.io.Serializable;
 
 public class Citas implements Serializable {
-    private String _ID;
+    private int _ID;
     private String nombre;
     private String telefono;
     private String correo;
@@ -11,9 +11,10 @@ public class Citas implements Serializable {
     private String falla;
     private String fecha;
     private String hora;
+    private String idMovil;
     public Citas() { }
     public Citas(String nombre, String telefono, String correo,
-                 String dispositivo, String falla, String fecha, String hora) {
+                 String dispositivo, String falla, String fecha, String hora, String idMovil) {
         this.nombre = nombre;
         this.telefono = telefono;
         this.correo = correo;
@@ -21,9 +22,10 @@ public class Citas implements Serializable {
         this.falla = falla;
         this.fecha = fecha;
         this.hora = hora;
+        this.idMovil = idMovil;
     }
-    public String get_ID() {return _ID; }
-    public void set_ID(String _ID) {this._ID = _ID; }
+    public int get_ID() {return _ID; }
+    public void set_ID(int _ID) {this._ID = _ID; }
 
     public String getNombre() {return nombre; }
     public void setNombre(String nombre) {this.nombre = nombre; }
@@ -45,4 +47,7 @@ public class Citas implements Serializable {
 
     public String getHora() {return hora; }
     public void setHora(String hora) {this.hora = hora; }
+
+    public String getIdMovil() {return idMovil; }
+    public void setIdMovil(String idMovil) {this.idMovil = idMovil; }
 }
