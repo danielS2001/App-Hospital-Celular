@@ -30,14 +30,14 @@
         android:padding="20dp">
 
         <TextView
+            android:id="@+id/lblTitulo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:text="Citas"
-            android:textColor="@color/black"
             android:gravity="center"
             android:paddingTop="10dp"
-            android:id="@+id/lblTitulo"></TextView>
+            android:text="Citas"
+            android:textColor="@color/black"
+            android:textSize="20dp"></TextView>
 
             <ListView
                 android:id="@android:id/list"

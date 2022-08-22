@@ -4,14 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AgendarActivity"
-    android:background="#0000">
+    android:background="#FFFFFF"
+    android:backgroundTint="#FFFFFF"
+    tools:context=".AgendarActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:background="#FFFFFF"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -28,83 +30,99 @@
             app:titleTextColor="@android:color/background_light" />
 
         <TextView
+            android:id="@+id/lblTitulo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="28dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
             android:text="Datos de cita"
             android:textColor="@color/black"
-            android:gravity="center"
-            android:layout_marginTop="20dp"
-            android:id="@+id/lblTitulo"></TextView>
+            android:textSize="28dp"></TextView>
 
         <EditText
-            android:layout_marginTop="10dp"
+            android:id="@+id/txtNombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="#000000"
             android:hint="Nombre completo"
-            android:id="@+id/txtNombre">
-        </EditText>
+            android:textColorHint="@color/black"
+            android:textColor="@color/black"></EditText>
 
         <EditText
             android:id="@+id/txtCelular"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="#000000"
             android:ems="10"
             android:hint="Celular"
-            android:inputType="phone" />
+            android:inputType="phone"
+            android:textColorHint="@color/black"
+            android:textColor="@color/black"/>
 
         <EditText
             android:id="@+id/txtEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="#000000"
             android:ems="10"
             android:hint="Email"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:textColorHint="@color/black"
+            android:textColor="@color/black"/>
 
         <EditText
-            android:layout_marginTop="10dp"
+            android:id="@+id/txtDispositivo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="#000000"
             android:hint="Dispositivo"
-            android:id="@+id/txtDispositivo">
-        </EditText>
+            android:textColorHint="@color/black"
+            android:textColor="@color/black"></EditText>
 
         <EditText
             android:id="@+id/txtFalla"
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:layout_marginTop="10dp"
-            android:hint="Descripción de falla">
-        </EditText>
+            android:backgroundTint="#000000"
+            android:hint="Descripción de falla"
+            android:textColorHint="@color/black"
+            android:textColor="@color/black"></EditText>
 
         <EditText
+            android:id="@+id/txtDate"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:inputType="date"
+            android:backgroundTint="#000000"
             android:hint="Fecha"
-            android:id="@+id/txtDate">
-        </EditText>
+            android:inputType="date"
+            android:textColorHint="@color/black"
+            android:textColor="@color/black"></EditText>
 
         <EditText
+            android:id="@+id/txtHora"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:inputType="time"
+            android:backgroundTint="#000000"
             android:hint="Hora"
-            android:id="@+id/txtHora">
-        </EditText>
+            android:inputType="time"
+            android:textColorHint="@color/black"
+            android:textColor="@color/black"></EditText>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:orientation="horizontal">
 
             <Button
+                android:id="@+id/btnAgendar"
                 android:layout_width="162dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:id="@+id/btnAgendar"
                 android:layout_marginLeft="37dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginRight="10dp"
                 android:text="Agendar"></Button>
 
